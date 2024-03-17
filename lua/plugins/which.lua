@@ -19,8 +19,13 @@ return {
                 g = { "<cmd>Telescope live_grep<cr>", "Files Grep" },
                 f = { "<cmd>lua vim.lsp.buf.format()<cr>", "File Format"},
                 r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
-                b = {":Neotree buffers reveal float<CR>", "File Buffers"},
 
+            },
+
+            ["<leader>b"] = {
+                name = "+Buffer",
+                b = { "<cmd>Telescope buffers<CR>", "TS Buffers"},
+                d = { "<cmd>bdelete<CR>", "Delete Buffer"},
             },
 
             ["<leader>s"] = {

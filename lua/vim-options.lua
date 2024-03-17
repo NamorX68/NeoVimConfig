@@ -17,6 +17,9 @@ vim.keymap.set("n", "<CS-k>", ":m .-2<CR>")
 vim.keymap.set("v", "<CS-j>", ":m '>+1<CR>gv")
 vim.keymap.set("v", "<CS-k>", ":m '<-2<CR>gv")
 
+vim.keymap.set("n", "<Tab>", ":BufferLineCycleNext<CR>")
+vim.keymap.set("n", "<S-Tab>", ":BufferLineCyclePrev<CR>")
+
 vim.wo.number = true
 vim.wo.relativenumber = true
 
