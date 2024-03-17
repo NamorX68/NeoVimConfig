@@ -17,9 +17,6 @@ vim.keymap.set("n", "<CS-k>", ":m .-2<CR>")
 vim.keymap.set("v", "<CS-j>", ":m '>+1<CR>gv")
 vim.keymap.set("v", "<CS-k>", ":m '<-2<CR>gv")
 
---vim.keymap.set('n', '<leader>tr', ':vertical belowright split | :vertical resize -20 | :terminal<CR>')
-vim.keymap.set('n', '<leader>tb', ':horizontal  botright split | :resize -7 | :terminal<CR>')
-
 vim.wo.number = true
 vim.wo.relativenumber = true
 
