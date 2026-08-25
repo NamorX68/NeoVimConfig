@@ -48,6 +48,14 @@ M.base = {
   { "<A-j>", ":m '>+1<cr>gv=gv", mode = "v", desc = "Move selection down" },
   { "<A-k>", ":m '<-2<cr>gv=gv", mode = "v", desc = "Move selection up" },
 
+  -- Same as above, reachable without a simultaneous Alt chord -- useful on
+  -- keyboards where Option lives on a tap-hold home-row-mod key (fast
+  -- repeated presses can lose the race against the hold timer there).
+  { "<leader>j", "<cmd>m .+1<cr>==", desc = "Move line down" },
+  { "<leader>k", "<cmd>m .-2<cr>==", desc = "Move line up" },
+  { "<leader>j", ":m '>+1<cr>gv=gv", mode = "v", desc = "Move selection down" },
+  { "<leader>k", ":m '<-2<cr>gv=gv", mode = "v", desc = "Move selection up" },
+
   -- Same window-nav keys as above, but for terminal-mode buffers (Claude
   -- Code's split, toggleterm floats, ...): terminal buffers start in
   -- terminal-insert mode and swallow <C-w>-style commands otherwise, so
