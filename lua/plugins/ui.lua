@@ -314,16 +314,19 @@ return {
       -- The block-letter header is deliberately unicode/wide -- an
       -- intentional exception to the house 120-char line-length style (see
       -- ~/.claude/CLAUDE.md), scoped to this decorative string literal only.
+      -- "AXIOM" is this config's own name (chosen 2026-08-23), not a plugin
+      -- or upstream project -- rendered in the "ANSI Shadow" figlet font to
+      -- match the previous plain "NEOVIM" header.
       dashboard = {
         enabled = true,
         preset = {
           header = [[
-███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
-████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
-██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
-██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
-██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
-╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
+ █████╗ ██╗  ██╗██╗ ██████╗ ███╗   ███╗
+██╔══██╗╚██╗██╔╝██║██╔═══██╗████╗ ████║
+███████║ ╚███╔╝ ██║██║   ██║██╔████╔██║
+██╔══██║ ██╔██╗ ██║██║   ██║██║╚██╔╝██║
+██║  ██║██╔╝ ██╗██║╚██████╔╝██║ ╚═╝ ██║
+╚═╝  ╚═╝╚═╝  ╚═╝╚═╝ ╚═════╝ ╚═╝     ╚═╝]],
           -- Mirrors the old alpha-nvim buttons, plus "Find projects" (this
           -- repo's own curated picker, lua/util/projects.lua -- kept instead
           -- of snacks' built-in git-root-scanning "projects" section so
