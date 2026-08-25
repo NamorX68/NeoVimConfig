@@ -12,7 +12,12 @@
 return {
   {
     "supermaven-inc/supermaven-nvim",
+    -- event loads it for actual ghost-text use; cmd additionally loads it on
+    -- demand so :SupermavenUseFree etc. work even before the first
+    -- InsertEnter (the plugin only registers its user commands in its own
+    -- setup(), which lazy.nvim only runs once a trigger fires).
     event = "InsertEnter",
+    cmd = { "SupermavenUseFree", "SupermavenUsePro", "SupermavenStatus", "SupermavenToggle", "SupermavenLogout" },
     opts = {
       keymaps = {
         accept_suggestion = "<Tab>",
