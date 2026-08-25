@@ -45,6 +45,75 @@ return {
     },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
+
+      -- Work around a known incompatibility between nvim-treesitter's frozen
+      -- `master` branch (unmaintained; the plugin's original maintainer has
+      -- archived the project) and Neovim 0.12+: for the fenced-code-block
+      -- info-string capture, `match[capture_id]` can come back as an empty
+      -- table instead of a single node. query_predicates.lua passes that
+      -- straight into `get_node_text()` / `get_range()`, which then calls
+      -- `:range()` on nil, crashing the markdown highlighter on every fenced
+      -- code block that names a language (```sh, ```lua, ...). Re-register
+      -- the three affected directives with a defensive unwrap. This survives
+      -- `:TSUpdate` since it runs from our own config, not a vendored file.
+      -- Upstream: https://github.com/neovim/neovim/issues/39032
+      --           https://github.com/nvim-treesitter/nvim-treesitter/issues/8618
+      local ts_query = require("vim.treesitter.query")
+      local directive_opts = { force = true, all = false }
+
+      -- Mirrors the private table in nvim-treesitter/query_predicates.lua.
+      local info_string_aliases = { ex = "elixir", pl = "perl", sh = "bash", uxn = "uxntal", ts = "typescript" }
+
+      ---@param match (TSNode|nil|TSNode[])[]
+      local function safe_node(match, capture_id)
+        local node = match[capture_id]
+        if type(node) == "table" then
+          node = node[1]
+        end
+        return node
+      end
+
+      ts_query.add_directive("set-lang-from-info-string!", function(match, _, bufnr, pred, metadata)
+        local node = safe_node(match, pred[2])
+        if not node then
+          return
+        end
+        local alias = vim.treesitter.get_node_text(node, bufnr):lower()
+        local ft_match = vim.filetype.match({ filename = "a." .. alias })
+        metadata["injection.language"] = ft_match or info_string_aliases[alias] or alias
+      end, directive_opts)
+
+      local html_script_type_languages = {
+        ["importmap"] = "json",
+        ["module"] = "javascript",
+        ["application/ecmascript"] = "javascript",
+        ["text/ecmascript"] = "javascript",
+      }
+      ts_query.add_directive("set-lang-from-mimetype!", function(match, _, bufnr, pred, metadata)
+        local node = safe_node(match, pred[2])
+        if not node then
+          return
+        end
+        local type_attr_value = vim.treesitter.get_node_text(node, bufnr)
+        local configured = html_script_type_languages[type_attr_value]
+        if configured then
+          metadata["injection.language"] = configured
+        else
+          local parts = vim.split(type_attr_value, "/", {})
+          metadata["injection.language"] = parts[#parts]
+        end
+      end, directive_opts)
+
+      ts_query.add_directive("downcase!", function(match, _, bufnr, pred, metadata)
+        local id = pred[2]
+        local node = safe_node(match, id)
+        if not node then
+          return
+        end
+        local text = vim.treesitter.get_node_text(node, bufnr, { metadata = metadata[id] }) or ""
+        metadata[id] = metadata[id] or {}
+        metadata[id].text = string.lower(text)
+      end, directive_opts)
     end,
   },
 
