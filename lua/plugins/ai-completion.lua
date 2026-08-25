@@ -4,8 +4,10 @@
 -- as virtual text rather than a blink.cmp source, so it composes with
 -- blink.cmp's Tab/snippet-jump fallback chain instead of competing with it.
 --
--- First use requires linking an account: run :SupermavenUse and follow the
--- browser prompt (free, no credit card).
+-- Free tier needs no account linking: run :SupermavenUseFree once and it's
+-- active immediately (no browser step). :SupermavenUsePro exists for the
+-- paid tier and shows its activation URL in an in-editor floating window --
+-- not a browser popup -- since it must be opened manually.
 
 return {
   {
