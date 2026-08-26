@@ -67,6 +67,35 @@ M.base = {
   { "<C-k>", "<C-\\><C-n><C-w>k", mode = "t", desc = "Go to upper window" },
   { "<C-l>", "<C-\\><C-n><C-w>l", mode = "t", desc = "Go to right window" },
 
+  -- Shift+Enter multiline input for Claude Code (or any other job) running
+  -- inside a :terminal buffer. Ghostty is configured to send Shift+Enter as
+  -- literal ESC+CR bytes (`keybind = shift+enter=text:\x1b\r`) -- outside
+  -- Nvim the `claude` CLI reads those raw bytes straight off the pty and
+  -- inserts a newline. Once Nvim's own TUI sits in between, though, it
+  -- parses that ESC+CR pair as the single key <M-CR> (the same legacy
+  -- ambiguity a real Option+Enter press has) and then has no translation
+  -- entry for that key when re-serializing terminal-mode input for the
+  -- embedded job, so only a bare CR reaches `claude` and the message
+  -- submits instead of inserting a line. Sending the exact bytes ourselves
+  -- via nvim_chan_send() bypasses that lossy re-serialization. <S-CR> is
+  -- mapped too in case a given terminal ever forwards it undisguised.
+  {
+    "<M-CR>",
+    function()
+      if vim.b.terminal_job_id then vim.api.nvim_chan_send(vim.b.terminal_job_id, "\x1b\r") end
+    end,
+    mode = "t",
+    desc = "Insert newline in terminal job (Claude Code multiline input)",
+  },
+  {
+    "<S-CR>",
+    function()
+      if vim.b.terminal_job_id then vim.api.nvim_chan_send(vim.b.terminal_job_id, "\x1b\r") end
+    end,
+    mode = "t",
+    desc = "Insert newline in terminal job (Claude Code multiline input)",
+  },
+
   { "<", "<gv", mode = "v", desc = "Indent left, keep selection" },
   { ">", ">gv", mode = "v", desc = "Indent right, keep selection" },
 
