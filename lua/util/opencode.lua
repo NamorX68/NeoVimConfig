@@ -16,7 +16,7 @@ local M = {}
 --- tool panels instead of opencode.nvim's own default (a left vsplit).
 function M.toggle()
   require("snacks.terminal").toggle("opencode --port", {
-    win = { position = "right", width = 0.30 },
+    win = { position = "right", width = 0.40 },
   })
 end
 
