@@ -396,7 +396,10 @@ return {
             title = "TODOs",
             section = "terminal",
             enabled = function() return Snacks.git.get_root() ~= nil and vim.fn.executable("rg") == 1 end,
-            cmd = "rg --no-heading --line-number --color=never -e 'TODO|FIXME|HACK' -g '!node_modules' -m 5",
+            -- `|| true` swallows ripgrep's exit code 1 ("no matches found"), which the
+            -- terminal section would otherwise surface as a spurious "Job Error" popup
+            -- in any project that happens to have no TODO/FIXME/HACK comments.
+            cmd = "rg --no-heading --line-number --color=never -e 'TODO|FIXME|HACK' -g '!node_modules' -m 5 || true",
             height = 5,
             padding = 1,
             ttl = 5 * 60,
